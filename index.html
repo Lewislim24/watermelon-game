@@ -3,505 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Watermelon Game</title>
+  <title>🎮 Game Hub</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: #1a1a2e;
       color: #eee;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, sans-serif;
-      padding: 16px 8px;
-      gap: 12px;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      letter-spacing: 2px;
-      color: #f9ca24;
-      text-shadow: 0 0 12px rgba(249,202,36,0.4);
-    }
-
-    #ui {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    #score-panel {
-      display: flex;
-      gap: 24px;
-    }
-
-    .score-box {
-      background: #16213e;
-      border: 1px solid #0f3460;
-      border-radius: 8px;
-      padding: 8px 16px;
-      text-align: center;
-      min-width: 80px;
-    }
-
-    .score-box .label {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-      color: #aaa;
-    }
-
-    .score-box .value {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #f9ca24;
-    }
-
-    #next-panel {
-      background: #16213e;
-      border: 1px solid #0f3460;
-      border-radius: 8px;
-      padding: 8px 12px;
-      text-align: center;
-    }
-
-    #next-panel .label {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-      color: #aaa;
-      margin-bottom: 4px;
-    }
-
-    #next-canvas {
-      display: block;
-    }
-
-    #game-wrap {
-      position: relative;
-      width: 400px;
-      height: 500px;
-      border: 3px solid #0f3460;
-      border-top: 2px dashed #0f3460;
-      border-radius: 0 0 8px 8px;
-      overflow: hidden;
-      cursor: crosshair;
-      box-shadow: 0 0 30px rgba(15,52,96,0.6);
-    }
-
-    #game-canvas, #ui-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    #ui-canvas {
-      pointer-events: none;
-    }
-
-    #overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 10, 20, 0.88);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 16px;
-      z-index: 10;
+      padding: 48px 16px;
+      font-family: system-ui, -apple-system, sans-serif;
+      gap: 32px;
     }
-
-    #overlay.hidden { display: none; }
-
-    #overlay h2 {
-      font-size: 2rem;
-      color: #e74c3c;
-      text-shadow: 0 0 20px rgba(231,76,60,0.6);
-    }
-
-    #overlay p {
-      font-size: 1.1rem;
-      color: #eee;
-    }
-
-    #overlay p span {
+    header { text-align: center; }
+    h1 {
+      font-size: 2.8rem;
       color: #f9ca24;
-      font-weight: bold;
+      text-shadow: 0 0 24px rgba(249,202,36,0.4);
+      margin-bottom: 8px;
     }
-
-    #restart-btn {
-      background: #f9ca24;
-      color: #1a1a2e;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 28px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: transform 0.1s, opacity 0.1s;
+    header p { color: #888; font-size: 1rem; letter-spacing: 1px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 18px;
+      max-width: 660px;
+      width: 100%;
     }
-
-    #restart-btn:hover { opacity: 0.9; transform: scale(1.04); }
-    #restart-btn:active { transform: scale(0.97); }
-
-    #fruit-guide {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 420px;
-    }
-
-    .fruit-chip {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 99px;
+    .card {
       background: #16213e;
       border: 1px solid #0f3460;
-      color: #ccc;
+      border-radius: 14px;
+      padding: 28px 20px 20px;
+      text-align: center;
+      text-decoration: none;
+      color: #eee;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
     }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+      border-color: var(--accent);
+    }
+    .card .icon { font-size: 3.2rem; line-height: 1; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; }
+    .card p { font-size: 0.78rem; color: #999; line-height: 1.45; flex: 1; }
+    .card .play {
+      margin-top: 10px;
+      padding: 6px 22px;
+      border-radius: 99px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    footer { color: #444; font-size: 0.75rem; }
   </style>
 </head>
 <body>
-  <h1>🍉 Watermelon Game</h1>
+  <header>
+    <h1>🎮 Game Hub</h1>
+    <p>Choose a game and start playing</p>
+  </header>
 
-  <div id="ui">
-    <div id="score-panel">
-      <div class="score-box">
-        <div class="label">SCORE</div>
-        <div class="value" id="score">0</div>
-      </div>
-      <div class="score-box">
-        <div class="label">BEST</div>
-        <div class="value" id="best">0</div>
-      </div>
-    </div>
-    <div id="next-panel">
-      <div class="label">NEXT</div>
-      <canvas id="next-canvas" width="60" height="60"></canvas>
-    </div>
+  <div class="grid">
+    <a class="card" href="watermelon.html" style="--accent:#16a085">
+      <span class="icon">🍉</span>
+      <h2>Watermelon</h2>
+      <p>Drop and merge fruits to create the ultimate watermelon!</p>
+      <span class="play">Play</span>
+    </a>
+    <a class="card" href="snake.html" style="--accent:#27ae60">
+      <span class="icon">🐍</span>
+      <h2>Snake</h2>
+      <p>Eat food, grow longer, and don't hit the walls or yourself!</p>
+      <span class="play">Play</span>
+    </a>
+    <a class="card" href="breakout.html" style="--accent:#e67e22">
+      <span class="icon">🧱</span>
+      <h2>Breakout</h2>
+      <p>Bounce the ball and smash through all the bricks!</p>
+      <span class="play">Play</span>
+    </a>
+    <a class="card" href="2048.html" style="--accent:#9b59b6">
+      <span class="icon">🔢</span>
+      <h2>2048</h2>
+      <p>Slide and merge tiles until you reach the 2048 tile!</p>
+      <span class="play">Play</span>
+    </a>
+    <a class="card" href="flappy.html" style="--accent:#3498db">
+      <span class="icon">🐦</span>
+      <h2>Flappy Bird</h2>
+      <p>Tap to flap your wings and navigate through the pipes!</p>
+      <span class="play">Play</span>
+    </a>
   </div>
 
-  <div id="game-wrap">
-    <canvas id="game-canvas"></canvas>
-    <canvas id="ui-canvas"></canvas>
-    <div id="overlay" class="hidden">
-      <h2>Game Over!</h2>
-      <p>Score: <span id="final-score">0</span></p>
-      <button id="restart-btn">Play Again</button>
-    </div>
-  </div>
-
-  <div id="fruit-guide">
-    <span class="fruit-chip">🍒 Cherry</span>
-    <span class="fruit-chip">🍓 Strawberry</span>
-    <span class="fruit-chip">🍇 Grape</span>
-    <span class="fruit-chip">🍊 Dekopon</span>
-    <span class="fruit-chip">🍋 Persimmon</span>
-    <span class="fruit-chip">🍎 Apple</span>
-    <span class="fruit-chip">🍐 Pear</span>
-    <span class="fruit-chip">🍑 Peach</span>
-    <span class="fruit-chip">🍍 Pineapple</span>
-    <span class="fruit-chip">🍈 Melon</span>
-    <span class="fruit-chip">🍉 Watermelon</span>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <script>
-    const FRUITS = [
-      { name: 'Cherry',     emoji: '🍒', radius: 15, color: '#e74c3c', score: 1   },
-      { name: 'Strawberry', emoji: '🍓', radius: 20, color: '#e91e63', score: 3   },
-      { name: 'Grape',      emoji: '🍇', radius: 28, color: '#9b59b6', score: 6   },
-      { name: 'Dekopon',    emoji: '🍊', radius: 37, color: '#e67e22', score: 10  },
-      { name: 'Persimmon',  emoji: '🍋', radius: 44, color: '#f39c12', score: 15  },
-      { name: 'Apple',      emoji: '🍎', radius: 52, color: '#c0392b', score: 21  },
-      { name: 'Pear',       emoji: '🍐', radius: 59, color: '#27ae60', score: 28  },
-      { name: 'Peach',      emoji: '🍑', radius: 67, color: '#fd79a8', score: 36  },
-      { name: 'Pineapple',  emoji: '🍍', radius: 75, color: '#f1c40f', score: 45  },
-      { name: 'Melon',      emoji: '🍈', radius: 84, color: '#2ecc71', score: 55  },
-      { name: 'Watermelon', emoji: '🍉', radius: 90, color: '#16a085', score: 100 },
-    ];
-
-    const CONTAINER_W = 400;
-    const CONTAINER_H = 500;
-    const WALL_T = 60;
-    const DANGER_Y = 60;
-    const DROP_COOLDOWN = 600;
-
-    const { Engine, Render, Runner, Bodies, Body, World, Events } = Matter;
-
-    const gameCanvas = document.getElementById('game-canvas');
-    const uiCanvas   = document.getElementById('ui-canvas');
-    gameCanvas.width  = CONTAINER_W;
-    gameCanvas.height = CONTAINER_H;
-    uiCanvas.width    = CONTAINER_W;
-    uiCanvas.height   = CONTAINER_H;
-
-    const engine = Engine.create({ gravity: { y: 1.5 } });
-    const render = Render.create({
-      canvas: gameCanvas,
-      engine,
-      options: {
-        width: CONTAINER_W,
-        height: CONTAINER_H,
-        wireframes: false,
-        background: '#0d1117',
-      }
-    });
-    const runner = Runner.create();
-
-    // Walls
-    const floor = Bodies.rectangle(CONTAINER_W / 2, CONTAINER_H + WALL_T / 2, CONTAINER_W + WALL_T * 2, WALL_T, {
-      isStatic: true, label: 'wall',
-      render: { fillStyle: '#16213e' }
-    });
-    const wallL = Bodies.rectangle(-WALL_T / 2, CONTAINER_H / 2, WALL_T, CONTAINER_H * 3, {
-      isStatic: true, label: 'wall',
-      render: { fillStyle: '#16213e' }
-    });
-    const wallR = Bodies.rectangle(CONTAINER_W + WALL_T / 2, CONTAINER_H / 2, WALL_T, CONTAINER_H * 3, {
-      isStatic: true, label: 'wall',
-      render: { fillStyle: '#16213e' }
-    });
-    World.add(engine.world, [floor, wallL, wallR]);
-
-    // Game state
-    let score = 0;
-    let bestScore = parseInt(localStorage.getItem('wm_best') || '0', 10);
-    let currentLevel = randomLevel();
-    let nextLevel = randomLevel();
-    let aimX = CONTAINER_W / 2;
-    let isDropping = false;
-    let gameOver = false;
-    const pendingMerges = new Set();
-
-    function randomLevel() {
-      return Math.floor(Math.random() * 5);
-    }
-
-    function spawnFruit(x, level) {
-      const f = FRUITS[level];
-      const body = Bodies.circle(
-        Math.max(f.radius, Math.min(CONTAINER_W - f.radius, x)),
-        -f.radius - 10,
-        f.radius,
-        {
-          restitution: 0.25,
-          friction: 0.6,
-          frictionAir: 0.01,
-          density: 0.002,
-          label: 'fruit',
-          render: { fillStyle: f.color }
-        }
-      );
-      body.fruitLevel = level;
-      World.add(engine.world, body);
-      return body;
-    }
-
-    // Draw emoji on fruits after each render frame
-    Events.on(render, 'afterRender', () => {
-      const ctx = render.context;
-      for (const body of engine.world.bodies) {
-        if (body.label !== 'fruit') continue;
-        const f = FRUITS[body.fruitLevel];
-        ctx.save();
-        ctx.translate(body.position.x, body.position.y);
-        ctx.rotate(body.angle);
-        ctx.font = `${Math.floor(f.radius * 1.1)}px serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(f.emoji, 0, 2);
-        ctx.restore();
-      }
-    });
-
-    // Merge colliding fruits of the same level
-    Events.on(engine, 'collisionStart', ({ pairs }) => {
-      for (const { bodyA, bodyB } of pairs) {
-        if (bodyA.label !== 'fruit' || bodyB.label !== 'fruit') continue;
-        if (bodyA.fruitLevel !== bodyB.fruitLevel) continue;
-        if (bodyA.fruitLevel >= FRUITS.length - 1) continue;
-
-        const key = [bodyA.id, bodyB.id].sort().join('-');
-        if (pendingMerges.has(key)) continue;
-        pendingMerges.add(key);
-
-        setTimeout(() => {
-          pendingMerges.delete(key);
-          const allBodies = engine.world.bodies;
-          if (!allBodies.includes(bodyA) || !allBodies.includes(bodyB)) return;
-
-          const midX = (bodyA.position.x + bodyB.position.x) / 2;
-          const midY = (bodyA.position.y + bodyB.position.y) / 2;
-          const newLevel = bodyA.fruitLevel + 1;
-
-          World.remove(engine.world, bodyA);
-          World.remove(engine.world, bodyB);
-
-          const merged = Bodies.circle(midX, midY, FRUITS[newLevel].radius, {
-            restitution: 0.25,
-            friction: 0.6,
-            frictionAir: 0.01,
-            density: 0.002,
-            label: 'fruit',
-            render: { fillStyle: FRUITS[newLevel].color }
-          });
-          merged.fruitLevel = newLevel;
-          World.add(engine.world, merged);
-
-          score += FRUITS[newLevel].score;
-          updateScoreDOM();
-        }, 0);
-      }
-    });
-
-    // Game-over check each physics tick
-    Events.on(engine, 'afterUpdate', () => {
-      if (gameOver) return;
-      for (const body of engine.world.bodies) {
-        if (body.label !== 'fruit') continue;
-        const speed = Math.hypot(body.velocity.x, body.velocity.y);
-        const top = body.position.y - FRUITS[body.fruitLevel].radius;
-        if (body.position.y > 0 && top < DANGER_Y && speed < 1.5) {
-          triggerGameOver();
-          return;
-        }
-      }
-    });
-
-    function triggerGameOver() {
-      gameOver = true;
-      if (score > bestScore) {
-        bestScore = score;
-        localStorage.setItem('wm_best', bestScore);
-        document.getElementById('best').textContent = bestScore;
-      }
-      document.getElementById('final-score').textContent = score;
-      document.getElementById('overlay').classList.remove('hidden');
-    }
-
-    // Aim line + danger zone drawn on ui-canvas
-    function drawAimLine() {
-      const ctx = uiCanvas.getContext('2d');
-      ctx.clearRect(0, 0, CONTAINER_W, CONTAINER_H);
-
-      // Drop guide
-      ctx.save();
-      ctx.setLineDash([6, 5]);
-      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(aimX, 0);
-      ctx.lineTo(aimX, CONTAINER_H);
-      ctx.stroke();
-      ctx.restore();
-
-      // Danger line
-      ctx.save();
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = 'rgba(231,76,60,0.55)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, DANGER_Y);
-      ctx.lineTo(CONTAINER_W, DANGER_Y);
-      ctx.stroke();
-      ctx.fillStyle = 'rgba(231,76,60,0.35)';
-      ctx.font = '10px system-ui';
-      ctx.fillText('DANGER', 4, DANGER_Y - 3);
-      ctx.restore();
-    }
-
-    // Next-fruit preview
-    function updateNextPreview() {
-      const canvas = document.getElementById('next-canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, 60, 60);
-      const f = FRUITS[nextLevel];
-      ctx.beginPath();
-      ctx.arc(30, 30, 22, 0, Math.PI * 2);
-      ctx.fillStyle = f.color;
-      ctx.fill();
-      ctx.font = '22px serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(f.emoji, 30, 32);
-    }
-
-    function updateScoreDOM() {
-      document.getElementById('score').textContent = score;
-      if (score > bestScore) {
-        bestScore = score;
-        document.getElementById('best').textContent = bestScore;
-      }
-    }
-
-    // Input: mouse
-    const gameWrap = document.getElementById('game-wrap');
-
-    gameWrap.addEventListener('mousemove', e => {
-      if (gameOver) return;
-      const rect = gameWrap.getBoundingClientRect();
-      const r = FRUITS[currentLevel].radius;
-      aimX = Math.max(r, Math.min(CONTAINER_W - r, e.clientX - rect.left));
-      drawAimLine();
-    });
-
-    gameWrap.addEventListener('click', e => {
-      if (isDropping || gameOver) return;
-      isDropping = true;
-      spawnFruit(aimX, currentLevel);
-      currentLevel = nextLevel;
-      nextLevel = randomLevel();
-      updateNextPreview();
-      setTimeout(() => { isDropping = false; }, DROP_COOLDOWN);
-    });
-
-    // Input: touch
-    gameWrap.addEventListener('touchmove', e => {
-      e.preventDefault();
-      if (gameOver) return;
-      const rect = gameWrap.getBoundingClientRect();
-      const touch = e.touches[0];
-      const r = FRUITS[currentLevel].radius;
-      aimX = Math.max(r, Math.min(CONTAINER_W - r, touch.clientX - rect.left));
-      drawAimLine();
-    }, { passive: false });
-
-    gameWrap.addEventListener('touchend', e => {
-      e.preventDefault();
-      if (isDropping || gameOver) return;
-      isDropping = true;
-      spawnFruit(aimX, currentLevel);
-      currentLevel = nextLevel;
-      nextLevel = randomLevel();
-      updateNextPreview();
-      setTimeout(() => { isDropping = false; }, DROP_COOLDOWN);
-    }, { passive: false });
-
-    // Restart
-    document.getElementById('restart-btn').addEventListener('click', () => {
-      const fruits = engine.world.bodies.filter(b => b.label === 'fruit');
-      World.remove(engine.world, fruits);
-      score = 0;
-      gameOver = false;
-      isDropping = false;
-      currentLevel = randomLevel();
-      nextLevel = randomLevel();
-      updateScoreDOM();
-      updateNextPreview();
-      document.getElementById('overlay').classList.add('hidden');
-    });
-
-    // Init
-    document.getElementById('best').textContent = bestScore;
-    updateNextPreview();
-    drawAimLine();
-    Render.run(render);
-    Runner.run(runner, engine);
-  </script>
+  <footer>5 games · Built with ❤️</footer>
 </body>
 </html>
