@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-17T00:00:00Z",
+  "title": "Design System: Game Hub",
+  "extensions": {
+    "colorMeta": {
+      "navy-deep": {
+        "role": "neutral",
+        "displayName": "Deep Space Navy",
+        "canonical": "oklch(15% 0.06 252)",
+        "tonalRamp": ["#0a0c14", "#1a1a2e", "#242640", "#2e3055", "#3a3d6a", "#515585", "#7478a8", "#b0b3cc"]
+      },
+      "navy-surface": {
+        "role": "neutral",
+        "displayName": "Surface Navy",
+        "canonical": "oklch(17% 0.07 255)",
+        "tonalRamp": ["#0c0f1c", "#16213e", "#1e2d52", "#253866", "#2d4479", "#3d5790", "#6680ad", "#aab5cc"]
+      },
+      "navy-canvas": {
+        "role": "neutral",
+        "displayName": "Canvas Dark",
+        "canonical": "oklch(10% 0.03 250)",
+        "tonalRamp": ["#060810", "#0d1117", "#131820", "#1a2030", "#222840", "#303855", "#505875", "#9098b0"]
+      },
+      "navy-border": {
+        "role": "neutral",
+        "displayName": "Border Deep Blue",
+        "canonical": "oklch(22% 0.10 260)",
+        "tonalRamp": ["#070d1e", "#0f3460", "#143d72", "#1a4a88", "#2058a0", "#3370b8", "#6090cc", "#a8c0e0"]
+      },
+      "amber-gold": {
+        "role": "primary",
+        "displayName": "Amber Gold",
+        "canonical": "oklch(83% 0.19 85)",
+        "tonalRamp": ["#2a2000", "#4a3800", "#705800", "#987800", "#c09800", "#f9ca24", "#fbd85a", "#fdeea0"]
+      },
+      "ink-primary": {
+        "role": "neutral",
+        "displayName": "Ink Primary",
+        "canonical": "oklch(94% 0.005 250)",
+        "tonalRamp": ["#111111", "#333333", "#555555", "#777777", "#999999", "#bbbbbb", "#dddddd", "#eeeeee"]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "oklch(72% 0.005 250)",
+        "tonalRamp": ["#111111", "#333333", "#555555", "#777777", "#aaaaaa", "#cccccc", "#e0e0e0", "#f0f0f0"]
+      },
+      "game-teal": {
+        "role": "secondary",
+        "displayName": "Watermelon Teal",
+        "canonical": "oklch(54% 0.14 175)",
+        "tonalRamp": ["#051f1a", "#0a3a32", "#0f544a", "#136e61", "#16a085", "#1dc4a4", "#5dd9c0", "#a8ede4"]
+      },
+      "game-green": {
+        "role": "secondary",
+        "displayName": "Snake Green",
+        "canonical": "oklch(60% 0.17 145)",
+        "tonalRamp": ["#062012", "#0c3d22", "#125932", "#187542", "#27ae60", "#3dd47a", "#78e8a4", "#baf4d0"]
+      },
+      "game-orange": {
+        "role": "secondary",
+        "displayName": "Breakout Orange",
+        "canonical": "oklch(65% 0.18 50)",
+        "tonalRamp": ["#261200", "#4a2500", "#703800", "#964d00", "#c06800", "#e67e22", "#f09f5a", "#f8c898"]
+      },
+      "game-purple": {
+        "role": "secondary",
+        "displayName": "2048 Purple",
+        "canonical": "oklch(52% 0.16 300)",
+        "tonalRamp": ["#160a20", "#2d1540", "#44205f", "#5a2c7e", "#7840a0", "#9b59b6", "#b880cc", "#d8b0e0"]
+      },
+      "game-blue": {
+        "role": "secondary",
+        "displayName": "Flappy Blue",
+        "canonical": "oklch(58% 0.15 230)",
+        "tonalRamp": ["#071830", "#0e3060", "#144888", "#1a60b0", "#2478cc", "#3498db", "#68b4e8", "#a8d4f4"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hub h1 only. Amber-gold with glow. One instance on the site." },
+      "headline": { "displayName": "Headline", "purpose": "Game page h1. Game accent color with matching glow. Game name only." },
+      "title": { "displayName": "Title", "purpose": "Hub card game titles." },
+      "body": { "displayName": "Body", "purpose": "Card descriptions, in-game instructions." },
+      "label": { "displayName": "Label", "purpose": "Score box labels (SCORE, HIGH, LEVEL). Uppercase by content, not CSS." }
+    },
+    "shadows": [
+      {
+        "name": "hover-lift",
+        "value": "0 10px 28px rgba(0,0,0,0.5)",
+        "purpose": "Hub game cards on hover only. Paired with translateY(-5px). Never on resting surfaces."
+      },
+      {
+        "name": "heading-glow-gold",
+        "value": "0 0 24px rgba(249,202,36,0.4)",
+        "purpose": "text-shadow on hub h1. Follows amber-gold accent, not layout."
+      },
+      {
+        "name": "heading-glow-accent",
+        "value": "0 0 12px rgba(r,g,b,0.4)",
+        "purpose": "text-shadow on game page h1. Use the game accent's RGB values. Same formula as heading-glow-gold."
+      }
+    ],
+    "motion": [
+      {
+        "name": "snappy",
+        "value": "0.1s ease-out",
+        "purpose": "Hover state changes: nav link opacity, button opacity+scale. The fastest tier."
+      },
+      {
+        "name": "card-hover",
+        "value": "0.15s ease-out",
+        "purpose": "Card lift: transform, box-shadow, border-color toggled together."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "480px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Game Card",
+      "kind": "card",
+      "refersTo": "game-card",
+      "description": "Hub navigation card. Per-game accent injected via --accent CSS custom property.",
+      "html": "<a class=\"ds-game-card\" href=\"#\" style=\"--accent:#27ae60\">\n  <span class=\"ds-game-card__icon\">🐍</span>\n  <h2 class=\"ds-game-card__title\">Snake</h2>\n  <p class=\"ds-game-card__desc\">Eat food, grow longer, and don't hit the walls or yourself!</p>\n  <span class=\"ds-game-card__play\">Play</span>\n</a>",
+      "css": ".ds-game-card { background: #16213e; border: 1px solid #0f3460; border-radius: 14px; padding: 28px 20px 20px; text-align: center; text-decoration: none; color: #eee; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; } .ds-game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(0,0,0,0.5); border-color: var(--accent); } .ds-game-card__icon { font-size: 3.2rem; line-height: 1; } .ds-game-card__title { font-family: system-ui, -apple-system, sans-serif; font-size: 1.05rem; font-weight: 700; color: #eee; margin: 0; } .ds-game-card__desc { font-family: system-ui, sans-serif; font-size: 0.78rem; color: #999; line-height: 1.45; flex: 1; margin: 0; } .ds-game-card__play { margin-top: 10px; padding: 6px 22px; border-radius: 99px; background: var(--accent); color: #fff; font-family: system-ui, sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em; }"
+    },
+    {
+      "name": "Play Button",
+      "kind": "button",
+      "refersTo": "play-button",
+      "description": "Pill-shaped play button inside a hub card. Inherits game accent from --accent.",
+      "html": "<span class=\"ds-play-btn\" style=\"--accent:#e67e22\">Play</span>",
+      "css": ".ds-play-btn { display: inline-block; padding: 6px 22px; border-radius: 99px; background: var(--accent); color: #fff; font-family: system-ui, sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em; cursor: pointer; transition: opacity 0.1s ease-out, transform 0.1s ease-out; } .ds-play-btn:hover { opacity: 0.9; transform: scale(1.04); }"
+    },
+    {
+      "name": "Restart Button",
+      "kind": "button",
+      "refersTo": "restart-button",
+      "description": "In-game restart/start button rendered in the canvas overlay.",
+      "html": "<button class=\"ds-restart-btn\" style=\"--accent:#e67e22\">Play Again</button>",
+      "css": ".ds-restart-btn { background: var(--accent, #e67e22); color: #fff; border: none; border-radius: 8px; padding: 10px 28px; font-family: system-ui, sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.1s ease-out, transform 0.1s ease-out; } .ds-restart-btn:hover { opacity: 0.9; transform: scale(1.04); } .ds-restart-btn:focus-visible { outline: 2px solid var(--accent, #e67e22); outline-offset: 3px; }"
+    },
+    {
+      "name": "Score Box",
+      "kind": "custom",
+      "refersTo": "score-box",
+      "description": "Game UI readout. Dark surface with uppercase tracking label and large value in game accent.",
+      "html": "<div class=\"ds-score-box\" style=\"--accent:#27ae60\">\n  <div class=\"ds-score-box__label\">SCORE</div>\n  <div class=\"ds-score-box__value\">1024</div>\n</div>",
+      "css": ".ds-score-box { background: #16213e; border: 1px solid #0f3460; border-radius: 8px; padding: 6px 16px; text-align: center; min-width: 80px; } .ds-score-box__label { font-family: system-ui, sans-serif; font-size: 0.625rem; letter-spacing: 0.2em; color: #aaa; } .ds-score-box__value { font-family: system-ui, sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--accent, #f9ca24); }"
+    },
+    {
+      "name": "Back Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Single text link returning to the hub. Amber-gold at 80% opacity, full opacity on hover.",
+      "html": "<nav class=\"ds-back-nav\"><a href=\"index.html\" class=\"ds-back-nav__link\">← Game Hub</a></nav>",
+      "css": ".ds-back-nav { width: 100%; max-width: 420px; } .ds-back-nav__link { color: #f9ca24; text-decoration: none; font-family: system-ui, sans-serif; font-size: 0.85rem; opacity: 0.8; transition: opacity 0.1s ease-out; } .ds-back-nav__link:hover { opacity: 1; } .ds-back-nav__link:focus-visible { outline: 1px solid #f9ca24; outline-offset: 3px; }"
+    },
+    {
+      "name": "Game Canvas Wrapper",
+      "kind": "custom",
+      "refersTo": "game-card",
+      "description": "The structural wrapper around every game canvas. Hosts the start/end overlay.",
+      "html": "<div class=\"ds-canvas-wrap\">\n  <canvas id=\"gameCanvas\" width=\"400\" height=\"400\"></canvas>\n  <div class=\"ds-canvas-overlay\" id=\"overlay\">\n    <h2 class=\"ds-canvas-overlay__title\" style=\"color: #27ae60\">Snake</h2>\n    <p class=\"ds-canvas-overlay__sub\">Use arrow keys to move</p>\n    <button class=\"ds-restart-btn\" style=\"--accent:#27ae60\">Start Game</button>\n  </div>\n</div>",
+      "css": ".ds-canvas-wrap { position: relative; } .ds-canvas-wrap canvas { display: block; border: 2px solid #0f3460; border-radius: 4px; background: #0d1117; } .ds-canvas-overlay { position: absolute; inset: 0; background: rgba(10,10,20,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border-radius: 4px; } .ds-canvas-overlay.hidden { display: none; } .ds-canvas-overlay__title { font-family: system-ui, sans-serif; font-size: 1.8rem; font-weight: 700; } .ds-canvas-overlay__sub { font-family: system-ui, sans-serif; font-size: 0.85rem; color: #aaa; text-align: center; line-height: 1.5; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Handcrafted Lounge",
+    "overview": "This is a place someone made, not a product that was launched. The Game Hub has a quiet, focused energy — deep space navy surfaces, a warm amber-gold glow on the things that matter, and enough restraint that each game gets its own identity when you step into it. The hub defers to the games. The games defer to the player.\n\nThe system is built on a committed dark strategy: the navy palette spans three depth layers (page, surface, canvas), separated not by shadows but by tonally distinct blues. Color appears only where it earns its place. Motion is quiet at rest and snappy on interaction.",
+    "keyCharacteristics": [
+      "Three-layer dark depth (page → surface → canvas) via tonal navy, not shadows",
+      "Amber-gold as the single shared hub accent; each game gets its own distinct accent",
+      "System-ui typography — legible, neutral, never competes with the games",
+      "Hover interactions snappy at 0.1–0.15s, physical-feeling (lift + shadow)",
+      "No decorative elements — layout, color, and motion only"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Amber-gold (#f9ca24) is the hub's voice. On game pages, the game accent takes over entirely. The two should never compete.", "section": "colors" },
+      { "name": "The Tonal Depth Rule", "body": "Depth is expressed through tonal navy layers (#1a1a2e → #16213e → #0d1117), not shadows. Do not invent new depth layers.", "section": "elevation" },
+      { "name": "The Flat-by-Default Rule", "body": "Resting surfaces have no box-shadow. Shadows appear only as a response to hover interaction.", "section": "elevation" },
+      { "name": "The Glow Rule", "body": "Headings in an accent color always pair with a matching glow (text-shadow: 0 0 12px rgba(r,g,b,0.4)). The glow follows the accent, not the layout.", "section": "typography" },
+      { "name": "The Accent Injection Pattern", "body": "Per-game color is injected via style='--accent:#hex' on the card or page root. One component; five visual identities; no per-game CSS classes.", "section": "components" }
+    ],
+    "dos": [
+      "Do use amber-gold only on the hub page and navigation links. On game pages, the game accent takes its place.",
+      "Do inject per-game color via style=\"--accent:#hex\" on the card or page root.",
+      "Do apply glow text-shadow whenever a heading uses an accent color: text-shadow: 0 0 12px rgba(r,g,b,0.4).",
+      "Do use the three tonal navy layers as the depth system — tone, not shadow.",
+      "Do keep hover transitions at 0.1–0.15s. Immediate and physical, not animated."
+    ],
+    "donts": [
+      "Don't use AI slop patterns: cream backgrounds, pastel card grids, gradient text, glassmorphism, hero metrics, numbered section eyebrows.",
+      "Don't use cheap mobile-ad game aesthetics: flashing banners, gradient overload, fake progress bars, aggressive CTAs.",
+      "Don't use dark gamer cliché: neon-on-black aggression, purple-cyan neon schemes, toxic visual energy.",
+      "Don't use kids' site design: chunky primary colors, cartoon mascots, patronizing copy.",
+      "Don't add box-shadow to resting surfaces.",
+      "Don't use border-left or border-right as a colored stripe accent.",
+      "Don't use gradient text (background-clip: text).",
+      "Don't introduce new accent colors outside the defined set.",
+      "Don't use text-transform: uppercase in CSS. Uppercase labels are uppercase by content."
+    ]
+  }
+}

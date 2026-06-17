@@ -1,0 +1,60 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#fff",
+        "createdAt": "2026-06-17T01:25:57.065Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#e74c3c",
+        "createdAt": "2026-06-17T01:25:57.157Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(231, 76, 60, 0.5)",
+        "reason": "Game-over overlay glow, domain color",
+        "createdAt": "2026-06-17T01:30:17.093Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#e91e63",
+        "reason": "Strawberry fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:17.179Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#f39c12",
+        "reason": "Persimmon fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:17.271Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#c0392b",
+        "reason": "Apple fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:17.368Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#fd79a8",
+        "reason": "Peach fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:17.467Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#f1c40f",
+        "reason": "Pineapple fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:29.759Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#2ecc71",
+        "reason": "Melon fruit color in FRUITS game data",
+        "createdAt": "2026-06-17T01:30:29.851Z"
+      }
+    ]
+  }
+}

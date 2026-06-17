@@ -3,101 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Watermelon Game</title>
+  <title>Watermelon — Game Hub</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #1a1a2e;
+      --surface: #16213e;
+      --border:  #0f3460;
+      --amber:   #f9ca24;
+      --ink:     #eeeeee;
+      --ink-2:   #aaaaaa;
+      --accent:  #16a085;
+      --ease-quart: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     body {
-      background: #1a1a2e;
-      color: #eee;
+      background: var(--bg);
+      color: var(--ink);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       font-family: system-ui, -apple-system, sans-serif;
-      padding: 8px 8px 16px;
-      gap: 10px;
+      -webkit-font-smoothing: antialiased;
+      padding: 14px 16px 28px;
+      gap: 12px;
     }
+
     nav { width: 100%; max-width: 420px; }
     nav a {
-      color: #f9ca24;
+      color: var(--amber);
       text-decoration: none;
       font-size: 0.85rem;
-      opacity: 0.8;
+      opacity: 0.75;
       transition: opacity 0.1s;
     }
     nav a:hover { opacity: 1; }
+    nav a:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
+
     h1 {
       font-size: 1.6rem;
-      letter-spacing: 2px;
-      color: #f9ca24;
-      text-shadow: 0 0 12px rgba(249,202,36,0.4);
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(22, 160, 133, 0.4);
     }
-    #ui { display: flex; gap: 20px; align-items: center; }
-    #score-panel { display: flex; gap: 24px; }
+
+    /* Score + Next row */
+    #ui { display: flex; gap: 12px; align-items: stretch; }
+
+    #score-panel { display: flex; gap: 12px; }
+
     .score-box {
-      background: #16213e;
-      border: 1px solid #0f3460;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 8px 16px;
+      padding: 7px 16px;
       text-align: center;
       min-width: 80px;
     }
-    .score-box .label { font-size: 0.65rem; letter-spacing: 2px; color: #aaa; }
-    .score-box .value { font-size: 1.4rem; font-weight: bold; color: #f9ca24; }
+    .score-box .label { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--ink-2); }
+    .score-box .value { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+
     #next-panel {
-      background: #16213e;
-      border: 1px solid #0f3460;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 7px 12px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
-    #next-panel .label { font-size: 0.65rem; letter-spacing: 2px; color: #aaa; margin-bottom: 4px; }
+    #next-panel .label { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--ink-2); }
     #next-canvas { display: block; }
+
+    /* Game viewport — exact dimensions required by JS */
     #game-wrap {
       position: relative;
       width: 400px;
       height: 500px;
-      border: 3px solid #0f3460;
-      border-top: 2px dashed #0f3460;
+      border: 2px solid var(--border);
+      border-top: 2px dashed var(--border);
       border-radius: 0 0 8px 8px;
       overflow: hidden;
       cursor: crosshair;
-      box-shadow: 0 0 30px rgba(15,52,96,0.6);
+      box-shadow: 0 0 40px rgba(22, 160, 133, 0.08);
     }
+
     #game-canvas, #ui-canvas {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
     }
     #ui-canvas { pointer-events: none; }
+
+    /* Overlay — starts hidden; no start screen for this game */
     #overlay {
-      position: absolute; inset: 0;
-      background: rgba(10,10,20,0.88);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 16px; z-index: 10;
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 20, 0.88);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 10;
     }
     #overlay.hidden { display: none; }
-    #overlay h2 { font-size: 2rem; color: #e74c3c; text-shadow: 0 0 20px rgba(231,76,60,0.6); }
-    #overlay p { font-size: 1.1rem; color: #eee; }
-    #overlay p span { color: #f9ca24; font-weight: bold; }
+    #overlay h2 { font-size: 1.75rem; font-weight: 700; color: #e74c3c; text-shadow: 0 0 20px rgba(231, 76, 60, 0.5); }
+    #overlay p  { font-size: 1.1rem; color: var(--ink); }
+    #overlay p span { color: var(--amber); font-weight: 700; }
+
     #restart-btn {
-      background: #f9ca24; color: #1a1a2e; border: none; border-radius: 8px;
-      padding: 10px 28px; font-size: 1rem; font-weight: bold; cursor: pointer;
-      letter-spacing: 1px; transition: transform 0.1s, opacity 0.1s;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.1s, transform 0.1s var(--ease-quart);
     }
-    #restart-btn:hover { opacity: 0.9; transform: scale(1.04); }
+    #restart-btn:hover  { opacity: 0.9; transform: scale(1.04); }
     #restart-btn:active { transform: scale(0.97); }
+    #restart-btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+    /* Fruit guide */
     #fruit-guide {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      justify-content: center; max-width: 420px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 420px;
     }
     .fruit-chip {
-      font-size: 0.7rem; padding: 2px 6px; border-radius: 99px;
-      background: #16213e; border: 1px solid #0f3460; color: #ccc;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink-2);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #restart-btn { transition: none; }
     }
   </style>
 </head>
 <body>
   <nav><a href="index.html">← Game Hub</a></nav>
-  <h1>🍉 Watermelon Game</h1>
+  <h1>🍉 Watermelon</h1>
 
   <div id="ui">
     <div id="score-panel">

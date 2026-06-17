@@ -3,109 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎮 Game Hub</title>
+  <title>Game Hub</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #1a1a2e;
+      --border:   #0f3460;
+      --amber:    #f9ca24;
+      --ink:      #eeeeee;
+      --ink-muted: #999999;
+      --ease-quart: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     body {
-      background: #1a1a2e;
-      color: #eee;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 48px 16px;
+      background: var(--bg);
+      color: var(--ink);
       font-family: system-ui, -apple-system, sans-serif;
-      gap: 32px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
-    header { text-align: center; }
-    h1 {
-      font-size: 2.8rem;
-      color: #f9ca24;
-      text-shadow: 0 0 24px rgba(249,202,36,0.4);
-      margin-bottom: 8px;
+
+    .hub {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
-    header p { color: #888; font-size: 1rem; letter-spacing: 1px; }
-    .grid {
+
+    /* ── Header ─────────────────────────────── */
+    .hub-header {
+      padding: 72px 0 52px;
+      animation: slide-up 0.4s var(--ease-quart) both;
+    }
+
+    .hub-title {
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      color: var(--amber);
+      text-shadow: 0 0 48px rgba(249, 202, 36, 0.28);
+      text-wrap: balance;
+      margin-bottom: 14px;
+    }
+
+    .hub-desc {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Game list ───────────────────────────── */
+    .game-list {
+      border-top: 1px solid var(--border);
+      margin-bottom: 64px;
+    }
+
+    .game-row {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-      gap: 18px;
-      max-width: 660px;
-      width: 100%;
-    }
-    .card {
-      background: #16213e;
-      border: 1px solid #0f3460;
-      border-radius: 14px;
-      padding: 28px 20px 20px;
-      text-align: center;
-      text-decoration: none;
-      color: #eee;
-      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: 1fr auto auto;
       align-items: center;
-      gap: 8px;
+      gap: 16px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      outline: none;
+
+      opacity: 0;
+      animation: slide-up 0.38s var(--ease-quart) both;
     }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.5);
-      border-color: var(--accent);
-    }
-    .card .icon { font-size: 3.2rem; line-height: 1; }
-    .card h2 { font-size: 1.05rem; font-weight: 700; }
-    .card p { font-size: 0.78rem; color: #999; line-height: 1.45; flex: 1; }
-    .card .play {
-      margin-top: 10px;
-      padding: 6px 22px;
-      border-radius: 99px;
+
+    .game-row:nth-child(1) { animation-delay: 0.13s; }
+    .game-row:nth-child(2) { animation-delay: 0.19s; }
+    .game-row:nth-child(3) { animation-delay: 0.25s; }
+    .game-row:nth-child(4) { animation-delay: 0.31s; }
+    .game-row:nth-child(5) { animation-delay: 0.37s; }
+
+    /* Accent wash on hover */
+    .game-row::before {
+      content: '';
+      position: absolute;
+      inset: 0;
       background: var(--accent);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      pointer-events: none;
     }
-    footer { color: #444; font-size: 0.75rem; }
+
+    .game-row:hover::before,
+    .game-row:focus-visible::before {
+      opacity: 0.08;
+    }
+
+    .game-row:focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: -2px;
+    }
+
+    /* Row body */
+    .game-row__body { min-width: 0; }
+
+    .game-row__name {
+      font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      color: var(--ink);
+      transition: color 0.15s ease;
+    }
+
+    .game-row:hover .game-row__name,
+    .game-row:focus-visible .game-row__name {
+      color: var(--accent);
+    }
+
+    .game-row__tagline {
+      margin-top: 5px;
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+
+    /* Emoji */
+    .game-row__emoji {
+      font-size: 2.4rem;
+      line-height: 1;
+      flex-shrink: 0;
+      user-select: none;
+      transition: transform 0.28s var(--ease-quart);
+    }
+
+    .game-row:hover .game-row__emoji,
+    .game-row:focus-visible .game-row__emoji {
+      transform: scale(1.12) rotate(-5deg);
+    }
+
+    /* Play arrow */
+    .game-row__arrow {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.18s ease, transform 0.2s var(--ease-quart);
+      flex-shrink: 0;
+    }
+
+    .game-row:hover .game-row__arrow,
+    .game-row:focus-visible .game-row__arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── Footer ──────────────────────────────── */
+    .hub-footer {
+      color: #444;
+      font-size: 0.75rem;
+      text-align: center;
+      padding-bottom: 48px;
+      animation: fade-in 0.4s ease 0.44s both;
+    }
+
+    /* ── Keyframes ───────────────────────────── */
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Reduced motion ──────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .hub-header, .game-row, .hub-footer {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+      .game-row::before,
+      .game-row__name,
+      .game-row__emoji,
+      .game-row__arrow {
+        transition: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🎮 Game Hub</h1>
-    <p>Choose a game and start playing</p>
-  </header>
+  <div class="hub">
+    <header class="hub-header">
+      <h1 class="hub-title">Game Hub</h1>
+      <p class="hub-desc">Five games. Pick one. Start playing.</p>
+    </header>
 
-  <div class="grid">
-    <a class="card" href="watermelon.html" style="--accent:#16a085">
-      <span class="icon">🍉</span>
-      <h2>Watermelon</h2>
-      <p>Drop and merge fruits to create the ultimate watermelon!</p>
-      <span class="play">Play</span>
-    </a>
-    <a class="card" href="snake.html" style="--accent:#27ae60">
-      <span class="icon">🐍</span>
-      <h2>Snake</h2>
-      <p>Eat food, grow longer, and don't hit the walls or yourself!</p>
-      <span class="play">Play</span>
-    </a>
-    <a class="card" href="breakout.html" style="--accent:#e67e22">
-      <span class="icon">🧱</span>
-      <h2>Breakout</h2>
-      <p>Bounce the ball and smash through all the bricks!</p>
-      <span class="play">Play</span>
-    </a>
-    <a class="card" href="2048.html" style="--accent:#9b59b6">
-      <span class="icon">🔢</span>
-      <h2>2048</h2>
-      <p>Slide and merge tiles until you reach the 2048 tile!</p>
-      <span class="play">Play</span>
-    </a>
-    <a class="card" href="flappy.html" style="--accent:#3498db">
-      <span class="icon">🐦</span>
-      <h2>Flappy Bird</h2>
-      <p>Tap to flap your wings and navigate through the pipes!</p>
-      <span class="play">Play</span>
-    </a>
+    <nav class="game-list" aria-label="Games">
+      <a class="game-row" href="watermelon.html" style="--accent:#16a085">
+        <div class="game-row__body">
+          <div class="game-row__name">Watermelon</div>
+          <div class="game-row__tagline">Drop and merge fruits. Make the biggest watermelon.</div>
+        </div>
+        <span class="game-row__emoji" aria-hidden="true">🍉</span>
+        <span class="game-row__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="game-row" href="snake.html" style="--accent:#27ae60">
+        <div class="game-row__body">
+          <div class="game-row__name">Snake</div>
+          <div class="game-row__tagline">Eat, grow longer, don't crash.</div>
+        </div>
+        <span class="game-row__emoji" aria-hidden="true">🐍</span>
+        <span class="game-row__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="game-row" href="breakout.html" style="--accent:#e67e22">
+        <div class="game-row__body">
+          <div class="game-row__name">Breakout</div>
+          <div class="game-row__tagline">Bounce the ball. Break every brick.</div>
+        </div>
+        <span class="game-row__emoji" aria-hidden="true">🧱</span>
+        <span class="game-row__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="game-row" href="2048.html" style="--accent:#9b59b6">
+        <div class="game-row__body">
+          <div class="game-row__name">2048</div>
+          <div class="game-row__tagline">Slide and merge tiles until you hit 2048.</div>
+        </div>
+        <span class="game-row__emoji" aria-hidden="true">🔢</span>
+        <span class="game-row__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="game-row" href="flappy.html" style="--accent:#3498db">
+        <div class="game-row__body">
+          <div class="game-row__name">Flappy Bird</div>
+          <div class="game-row__tagline">Tap to fly. Avoid the pipes.</div>
+        </div>
+        <span class="game-row__emoji" aria-hidden="true">🐦</span>
+        <span class="game-row__arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+
+    <footer class="hub-footer">5 games · Made with ♥</footer>
   </div>
-
-  <footer>5 games · Built with ❤️</footer>
 </body>
 </html>

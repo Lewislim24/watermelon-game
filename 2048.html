@@ -3,65 +3,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2048</title>
+  <title>2048 — Game Hub</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #1a1a2e;
+      --surface: #16213e;
+      --border:  #0f3460;
+      --amber:   #f9ca24;
+      --ink:     #eeeeee;
+      --ink-2:   #aaaaaa;
+      --accent:  #9b59b6;
+      --ease-quart: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     body {
-      background: #1a1a2e; color: #eee;
-      display: flex; flex-direction: column; align-items: center;
-      min-height: 100vh; font-family: system-ui, sans-serif;
-      padding: 12px 8px; gap: 12px;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 14px 16px 28px;
+      gap: 12px;
     }
+
     nav { width: 100%; max-width: 420px; }
-    nav a { color: #f9ca24; text-decoration: none; font-size: 0.85rem; opacity: 0.8; }
+    nav a {
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 0.85rem;
+      opacity: 0.75;
+      transition: opacity 0.1s;
+    }
     nav a:hover { opacity: 1; }
-    h1 { font-size: 1.6rem; color: #9b59b6; text-shadow: 0 0 12px rgba(155,89,182,0.4); }
-    .panel { display: flex; gap: 20px; }
+    nav a:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+    }
+
+    .panel { display: flex; gap: 12px; }
+
     .score-box {
-      background: #16213e; border: 1px solid #0f3460;
-      border-radius: 8px; padding: 6px 16px; text-align: center; min-width: 80px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 16px;
+      text-align: center;
+      min-width: 80px;
     }
-    .score-box .lbl { font-size: 0.6rem; letter-spacing: 2px; color: #aaa; }
-    .score-box .val { font-size: 1.3rem; font-weight: bold; color: #9b59b6; }
+    .score-box .lbl { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--ink-2); }
+    .score-box .val { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+
+    /* Board — exact pixel layout required by JS tile positioning */
     #board-wrap {
-      background: #16213e; border: 2px solid #0f3460; border-radius: 8px;
-      padding: 10px; position: relative;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      position: relative;
     }
+
     #board {
-      display: grid; grid-template-columns: repeat(4, 88px);
-      grid-template-rows: repeat(4, 88px); gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 88px);
+      grid-template-rows: repeat(4, 88px);
+      gap: 8px;
     }
+
     .cell {
-      width: 88px; height: 88px; border-radius: 6px;
-      background: rgba(255,255,255,0.05);
+      width: 88px;
+      height: 88px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
     }
+
     .tile {
-      width: 88px; height: 88px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 1.8rem;
+      width: 88px;
+      height: 88px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.8rem;
       transition: transform 0.1s;
       position: relative;
     }
     .tile.new { animation: pop 0.15s ease; }
-    @keyframes pop { 0%{transform:scale(0.5);} 100%{transform:scale(1);} }
+    @keyframes pop {
+      0%  { transform: scale(0.5); }
+      100%{ transform: scale(1); }
+    }
+
+    /* Overlay */
     #overlay {
-      position: absolute; inset: 0; border-radius: 8px;
-      background: rgba(10,10,20,0.85);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 14px;
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: rgba(10, 10, 20, 0.88);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
     }
     #overlay.hidden { display: none; }
-    #overlay h2 { font-size: 1.8rem; color: #9b59b6; }
-    #overlay .result { font-size: 1rem; color: #eee; }
-    #overlay .result span { color: #f9ca24; font-weight: bold; }
-    #overlay .sub { font-size: 0.85rem; color: #aaa; text-align: center; }
+    #overlay h2 { font-size: 1.75rem; font-weight: 700; color: var(--accent); }
+    .sub  { font-size: 0.875rem; color: var(--ink-2); text-align: center; line-height: 1.6; }
+    .result { font-size: 1rem; color: var(--ink); }
+    .result span { color: var(--amber); font-weight: 700; }
+
     .btn {
-      background: #9b59b6; color: #fff; border: none; border-radius: 8px;
-      padding: 10px 28px; font-size: 1rem; font-weight: bold; cursor: pointer;
-      transition: opacity 0.1s, transform 0.1s;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.1s, transform 0.1s var(--ease-quart);
     }
     .btn:hover { opacity: 0.9; transform: scale(1.04); }
-    #hint { font-size: 0.75rem; color: #555; text-align: center; }
+    .btn:active { transform: scale(0.97); }
+    .btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+    #hint {
+      font-size: 0.75rem;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .tile { transition: none; }
+      .tile.new { animation: none; }
+    }
   </style>
 </head>
 <body>
