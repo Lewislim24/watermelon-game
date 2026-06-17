@@ -366,7 +366,7 @@
         if (body.label !== 'fruit') continue;
         const speed = Math.hypot(body.velocity.x, body.velocity.y);
         const top = body.position.y - FRUITS[body.fruitLevel].radius;
-        if (top < DANGER_Y && speed < 1.5) {
+        if (body.position.y > 0 && top < DANGER_Y && speed < 1.5) {
           triggerGameOver();
           return;
         }
